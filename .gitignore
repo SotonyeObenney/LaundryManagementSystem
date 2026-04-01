@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution and packaging
+build/
+dist/
+wheels/
+*.egg-info/
+
+# Unit test and coverage
+.coverage
+.pytest_cache/
+htmlcov/
+nosetests.xml
+coverage.xml
+cobertura.xml
+
+# Editors/OS
+.idea/  # For PyCharm/IntelliJ
+.vscode/ # For VS Code (if project-specific settings can be ignored)
+.DS_Store # For macOS
+
+# Flask instance folder (if used for non-versioned data)
+instance/
