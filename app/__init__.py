@@ -8,6 +8,9 @@ def create_app():
     app = Flask(__name__, template_folder='../templates')
     app.config.from_object(Config)
 
+    # ADD THIS LINE temporarily
+    print(f"DEBUG: Flask is looking for templates in: {app.template_folder}")
+
     # Initialize extensions
     db.init_app(app)
     # login_manager.init_app(app)
