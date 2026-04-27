@@ -30,7 +30,7 @@ def register():
         
         # 5. THE FEEDBACK: Tell the user it worked and move them to login
         flash('Registration successful! Please log in.', 'success')
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('auth_bp.login'))
     
     return render_template('auth/register.html', form=form)
     

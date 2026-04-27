@@ -9,6 +9,11 @@ class RegistrationForm(FlaskForm):
     address = StringField("Address", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     confirm_password = PasswordField("Confirm Password", validators=[DataRequired(), EqualTo("password")])
+    # role  = StringField("Role", validators=[DataRequired()])
+    # HTML code incase we want to add a dropdown for role selection in the future
+    #  <div class="form-group">
+    #         {{ form.role.label }} {{ form.role(class="form-control") }}
+    #       </div>
     submit = SubmitField("Register")
 
 class LoginForm(FlaskForm):
