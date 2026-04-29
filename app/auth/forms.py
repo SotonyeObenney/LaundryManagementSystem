@@ -10,7 +10,7 @@ class RegistrationForm(FlaskForm):
     phone = StringField("Phone", validators=[DataRequired()])
     address = StringField("Address", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired(), Length(min=6, message='Password must be at least 6 characters long')])
-    confirm_password = PasswordField("Confirm Password", validators=[DataRequired(), EqualTo("password"), Length(min=6)])
+    confirm_password = PasswordField("Confirm Password", validators=[DataRequired(), EqualTo("password", message='Passwords must match'), Length(min=6)])
     # role  = StringField("Role", validators=[DataRequired()])
     # HTML code incase we want to add a dropdown for role selection in the future
     #  <div class="form-group">
@@ -20,7 +20,7 @@ class RegistrationForm(FlaskForm):
 
     # Validate if email already exists
     def validate_email(self, email):
-        existing_user = db.session.execute(db.select(User).where(User.email==email.data))
+        existing_user = db.session.execute(db.select(User).where(User.email==email.data)).scalar_one_or_none()
         if existing_user:
             raise ValidationError("That email is already registered.")
 
