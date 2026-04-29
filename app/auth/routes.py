@@ -1,6 +1,6 @@
 from ..auth import auth_bp
 from flask import render_template, url_for, flash, redirect
-from flask_login import login_user
+from flask_login import login_user, login_required, logout_user
 from .forms import RegistrationForm, LoginForm   
 from .. import bcrypt
 from ..models import User
@@ -40,3 +40,9 @@ def login():
             return redirect(url_for('auth.register')) # Change to dashboard later
         flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('auth/login.html', form=form)
+
+@auth_bp.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("auth.register"))  # Change to home page later
