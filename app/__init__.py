@@ -9,7 +9,7 @@ import os
 load_dotenv()
 
 def create_app():
-    app = Flask(__name__, template_folder='../templates', static_folder='../static')    
+    app = Flask(__name__)    
     #app.config.from_object(Config)
     # 1. CONFIGURATION FIRST
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
