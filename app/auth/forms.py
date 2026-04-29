@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Email, EqualTo, Length
+from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
+from ..extensions import db
+from ..models import User
 
 class RegistrationForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
@@ -15,6 +17,12 @@ class RegistrationForm(FlaskForm):
     #         {{ form.role.label }} {{ form.role(class="form-control") }}
     #       </div>
     submit = SubmitField("Register")
+
+    # Validate if email already exists
+    def validate_email(self, email):
+        existing_user = db.session.execute(db.select(User).where(User.email==email.data))
+        if existing_user:
+            raise ValidationError("That email is already registered.")
 
 class LoginForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email()])
