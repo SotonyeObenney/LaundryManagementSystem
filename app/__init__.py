@@ -1,14 +1,10 @@
 from flask import Flask
-
-from app.models.user import User
 from .extensions import db, login_manager, bcrypt, migrate
 from config import Config
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
-
-#initializing the db and the db orm
 
 
 def create_app():
@@ -27,7 +23,8 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        return User.query.get(int(user_id))
+        from .models import User
+        return db.session.get(User, user_id)
 
     # 4. REGISTER BLUEPRINTS
     from app.auth import auth_bp
