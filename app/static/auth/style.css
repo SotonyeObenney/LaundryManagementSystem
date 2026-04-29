@@ -100,3 +100,7 @@ body {
   margin-bottom: 1rem;
   font-weight: 500;
 }
+
+.flash-msg { text-align: center; margin-bottom: 1rem; font-weight: 500; }
+.msg-danger { color: #dc3545; } /* Red */
+.msg-success { color: #28a745; } /* Green */
