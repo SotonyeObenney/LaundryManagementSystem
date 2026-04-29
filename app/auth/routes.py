@@ -25,7 +25,7 @@ def register():
         db.session.commit()
         login_user(new_user)
         flash(f'Account created for {form.name.data}!', 'success') 
-        return "Account created successfully and user logged in. Redirecting to dashboard..."
+        return redirect(url_for("auth.login"))
     return render_template('auth/register.html', form=form)
 
 
@@ -33,5 +33,10 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        pass
+        user = db.session.execute(db.select(User).where(User.email==form.email.data)).scalar()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user)
+            flash('Login Successful!', 'success')
+            return redirect(url_for('auth.register')) # Change to dashboard later
+        flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('auth/login.html', form=form)
