@@ -20,7 +20,7 @@ body {
 /* Unified Auth Styles */
 .auth-hero {
   min-height: 100vh;
-  background-image: url("/static/auth/laundryimg.jpeg"); /* Ensure path is correct */
+  background-image: url("laundryimg.jpeg"); /* Ensure path is correct */
   background-size: cover;
   background-position: center;
   position: relative;
