@@ -10,12 +10,10 @@ load_dotenv()
 
 def create_app():
     app = Flask(__name__)    
-    #app.config.from_object(Config)
-    # 1. CONFIGURATION FIRST
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///laundry.db'
+    # Configuration
+    app.config.from_object(Config)
     
-    # 2. INITIALIZE EXTENSIONS
+    # Initialize Extensions
     db.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
