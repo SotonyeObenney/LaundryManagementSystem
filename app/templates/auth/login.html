@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Login - LMS{% endblock %}
+
+{% block content %}
+<div class="auth-hero">
+  <div class="auth-container">
+    <h1 class="lms-title">Sign In</h1>
+
+    <form method="POST" action="{{ url_for('auth.login') }}">
+      {{ form.hidden_tag() }}
+      <div class="form-group">
+        {{ form.email.label }}
+        {{ form.email(class="auth-input", placeholder="Enter your email") }}
+      </div>
+      <div class="form-group">
+        {{ form.password.label }}
+        {{ form.password(class="auth-input", placeholder="Password") }}
+      </div>
+      <button type="submit" class="auth-btn">Sign In</button>
+    </form>
+
+    <div class="auth-link" style="text-align: center; margin-top: 1rem;">
+      Don't have an account? <a href="{{ url_for('auth.register') }}">Sign Up</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
