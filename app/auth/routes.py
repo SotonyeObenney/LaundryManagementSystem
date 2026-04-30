@@ -25,7 +25,7 @@ def register():
         db.session.commit()
         login_user(new_user)
         flash(f'Account created for {form.name.data}!', 'success') 
-        return redirect(url_for("auth.login"))
+        return redirect(url_for("auth.login")) # Change to dashboard later or remove login_user from line of above
     return render_template('auth/register.html', form=form)
 
 
