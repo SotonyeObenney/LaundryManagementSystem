@@ -38,7 +38,7 @@ def login():
             login_user(user)
             flash('Login Successful!', 'success')
             return redirect(url_for('auth.register')) # Change to dashboard later
-        flash('Login Unsuccessful. Please check email and password', 'danger')
+        flash('Login unsuccessful. Please check email and password', 'danger')
     return render_template('auth/login.html', form=form)
 
 @auth_bp.route("/logout")
