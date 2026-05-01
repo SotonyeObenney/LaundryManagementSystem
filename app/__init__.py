@@ -26,6 +26,8 @@ def create_app():
 
     # 4. REGISTER BLUEPRINTS
     from app.auth import auth_bp
+    from app.bookings import bookings_bp
     app.register_blueprint(auth_bp, url_prefix="/auth")
+    app.register_blueprint(bookings_bp, url_prefix="/bookings")
 
     return app
