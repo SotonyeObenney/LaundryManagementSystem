@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laundry Management System - Student Portal</title>
+<link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <h1 class="h">Laundry Management System</h1>
+<div class="user-profile">Hello, Student <div class="profile-pic">S</div></div>
+    </header>
+
+    <div class="info">
+        <div class="lhs">
+        <h2 class="info-h">Fresh Clothes, <br> Zero Stress</h2>
+        <p class="p">DESCRIPTION</p>
+
+        <div class="service-card">
+            <div class="service">
+                <p>Wash & Fold</p>
+            </div>
+
+            <div class="service">
+                <p>Wash & Iron</p>
+            </div>
+
+            <div class="service">
+                <p class="iron">Iron</p>
+            </div>
+
+        </div>
+        </div>
+
+        <div class="image-container">
+            <img src="laundry-removebg-preview.png" alt="laundry image">
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Create New Order</h2>
+            <p class="note">Note: Maximum limit of 30 items per order.</p>
+            
+            <form action="#" method="POST">
+                <div class="form-group">
+                    <label for="serviceType">Service Type</label>
+                    <select id="serviceType" class="form-control" required>
+                        <option value="" disabled selected>Select a service...</option>
+                        <option value="wash_fold">Wash & Fold</option>
+                        <option value="wash_iron">Wash & Iron</option>
+                        <option value="iron">Iron</option>
+
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Item Quantities</label>
+                    
+                    <div class="item-category">
+                        <span>Shirts & Tops</span>
+                        <input type="number" id="shirts" class="form-control" min="0" max="30" value="0">
+                    </div>
+                    
+                    <div class="item-category">
+                        <span>Trousers & Bottoms</span>
+                        <input type="number" id="trousers" class="form-control" min="0" max="30" value="0">
+                    </div>
+                    
+                    <div class="item-category">
+                        <label for="traditional">Traditional Wear</label>
+                        <input type="number" id="traditional" class="form-control" min="0" max="30" value="0">
+                    </div>
+                    
+                    <div class="item-category">
+                        <label for="light">Light Wear</label>
+                        <input type="number" id="light" class="form-control" min="0" max="30" value="0">
+                    </div>
+                    
+                    <div class="item-category">
+                        <label for="heavy">Heavy Wear</label>
+                        <input type="number" id="heavy" class="form-control" min="0" max="30" value="0">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Submit Order</button>
+            </form>
+        </div>
+
+        <div class="cards">
+            <h2>My Active Orders</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Status</th>
+                            <th>Payment Status</th>
+                            <th>Delivery Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#ORD-8923</td>
+                            <td><span class="badge pending">Pending</span></td>
+                            <td><span class="badge unpaid">Unpaid</span></td>
+                            <td>TBD</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>#ORD-8910</td>
+                            <td><span class="badge verified">Verified</span></td>
+                            <td><span class="badge unpaid">Unpaid</span></td>
+                            <td>TBD</td>
+                            <td><button class="pay-btn">Pay Invoice</button></td>
+                        </tr>
+                        <tr>
+                            <td>#ORD-8854</td>
+                            <td><span class="badge delivery">Out for Delivery</span></td>
+                            <td><span class="badge paid">Paid</span></td>
+                            <td>Mon, Oct 12</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 LMS Laundry Management System | Contact: info@lmslaundry.com | Phone: +1 (555) 123-4567</p>
+    </footer>
+
+</body>
+</html>

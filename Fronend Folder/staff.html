@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard - LMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; padding: 2rem; background: #f8f9ff; margin: 0; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: rgb(9, 101, 154); text-align: center; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .card { background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+        .btn { padding: 1rem 2rem; background: linear-gradient(135deg, rgb(9,101,154), #4169E1); color: white; border: none; border-radius: 12px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Staff Dashboard - Laundry Management System</h1>
+        <div class="dashboard-grid">
+            <div class="card">
+                <h2>Manage Orders</h2>
+                <p>View, update status, assign deliveries.</p>
+                <button class="btn">Go to Orders</button>
+            </div>
+            <div class="card">
+                <h2>Customer Management</h2>
+                <p>View customer details and history.</p>
+                <button class="btn">View Customers</button>
+            </div>
+            <div class="card">
+                <h2>Reports & Analytics</h2>
+                <p>Daily/weekly reports and performance.</p>
+                <button class="btn">View Reports</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
