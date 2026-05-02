@@ -1,5 +1,6 @@
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user, login_required
+from sqlalchemy.orm import joinedload
 from . import bookings_bp
 from .forms import OrderForm
 from ..models import Service, Order, OrderItem
@@ -77,3 +78,18 @@ def create_order():
         return redirect(url_for('auth.register')) # Change to Dashboard later
 
     return render_template("bookings/create.html", form=form)
+
+
+@bookings_bp.route("/my-orders")
+@login_required
+def my_orders():
+    # We use joinedload to fetch the items at the same time as the order
+    # This prevents the 'N+1' query problem (more efficient for the DB)
+    orders = db.session.execute(
+        db.select(Order)
+        .where(Order.customer_id == current_user.id)
+        .options(joinedload(Order.items))
+        .order_by(Order.order_date.desc())
+    ).scalars().unique().all()
+    
+    return render_template("bookings/dashboard.html", orders=orders)
