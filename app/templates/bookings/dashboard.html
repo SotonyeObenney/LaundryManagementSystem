@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>My Laundry Orders</h2>
+    {% for order in orders %}
+        <div style="border: 1px solid #ccc; margin-bottom: 10px; padding: 10px;">
+            <p><strong>Order ID:</strong> {{ order.id }}</p>
+            <p><strong>Status:</strong> {{ order.status }}</p>
+            <p><strong>Total:</strong> ₦{{ order.total_price }}</p>
+            <ul>
+                {% for item in order.items %}
+                    <li>{{ item.item_type }}: {{ item.quantity }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
