@@ -52,7 +52,6 @@ def create_order():
             running_total = 0
             for item_name, qty in categories.items():
                 if qty > 0:
-                    cost = qty * selected_service.price_per_unit
                     item = OrderItem(
                         order_id=new_order.id,
                         service_id=selected_service.id,
