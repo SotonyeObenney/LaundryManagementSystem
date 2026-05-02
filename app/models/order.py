@@ -17,7 +17,7 @@ class Order(db.Model):
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     customer = relationship("User", backref="orders")
-    items = relationship("OrderItem", backref="order")
+    items = relationship("OrderItem", backref="order", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Order {self.id} - {self.status}>"
