@@ -15,12 +15,13 @@ body {
   margin: 0;
   font-family: "Poppins", sans-serif;
   background-color: #f8fafc;
+  background-image: url("laundryimg.jpeg");
 }
 
 /* Unified Auth Styles */
 .auth-hero {
   min-height: 100vh;
-  background-image: url("laundryimg.jpeg"); /* Ensure path is correct */
+   /* Ensure path is correct */
   background-size: cover;
   background-position: center;
   position: relative;
