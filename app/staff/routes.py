@@ -1,0 +1,57 @@
+from flask import render_template, redirect, url_for, flash, request
+from flask_login import login_required
+from . import staff_bp
+from ..models import Order
+from ..extensions import db
+from ..utils.decorators import admin_only 
+from ..utils.email import send_verification_alert 
+
+@staff_bp.route("/pending-orders")
+@login_required
+@admin_only
+def get_pending_orders():
+    """US 3.1: Admin can view all pending orders."""
+    orders = db.session.execute(
+        db.select(Order).where(Order.status.in_(['pending', 'received']))
+    ).scalars().all()
+    return render_template("staff/pending_orders.html", orders=orders)
+
+@staff_bp.route("/verify-order/<int:order_id>", methods=["GET", "POST"])
+@login_required
+@admin_only
+def verify_order(order_id):
+    """US 3.1 & 4.1: Confirm clothes match and generate price."""
+    order = db.session.get(Order, order_id)
+    
+    if request.method == "POST":
+        total_items = 0
+        mismatched_categories = []
+
+        # Update quantities based on physical count
+        for item in order.items:
+            physical_count = request.form.get(f"item_{item.id}", type=int)
+            if physical_count is not None:
+                # Track if there's a mismatch for the email alert
+                if physical_count != item.quantity:
+                    mismatched_categories.append(f"{item.item_type}: expected {item.quantity}, found {physical_count}")
+                
+                item.quantity = physical_count
+                total_items += physical_count
+
+        # Check 30-item limit (SRS Requirement)
+        if total_items > 30:
+            order.status = "limit_exceeded"
+            # US 3.1: Trigger email notification
+            send_verification_alert(order.customer.email, order.id, mismatched_categories)
+            flash("Order exceeds 30 items. Student notified.", "warning")
+        else:
+            # US 3.1 & 4.1: Finalize Verification and Price
+            order.status = "verified"
+            item_total = sum(i.quantity * i.price for i in order.items)
+            order.total_price = item_total + order.delivery_fee
+            flash(f"Order #{order.id} verified. Total: ₦{order.total_price}", "success")
+
+        db.session.commit()
+        return redirect(url_for('staff.dashboard'))
+
+    return render_template("staff/verify-orders.html", order=order)
