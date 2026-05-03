@@ -2,11 +2,7 @@ from flask import Flask
 from .extensions import db, login_manager, bcrypt, migrate
 from config import Config
 from dotenv import load_dotenv
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-import os
 
-load_dotenv()
 
 def create_app():
     app = Flask(__name__)    
@@ -27,7 +23,9 @@ def create_app():
     # 4. REGISTER BLUEPRINTS
     from app.auth import auth_bp
     from app.bookings import bookings_bp
+    from app.staff import staff_bp
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(bookings_bp, url_prefix="/bookings")
+    app.register_blueprint(staff_bp, url_prefix="/staff")
 
     return app
