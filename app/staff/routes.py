@@ -3,12 +3,12 @@ from flask_login import login_required
 from . import staff_bp
 from ..models import Order
 from ..extensions import db
-from ..utils.decorators import admin_only 
+from ..utils.decorators import staff_required 
 from ..utils.email import send_verification_alert 
 
 @staff_bp.route("/pending-orders")
 @login_required
-@admin_only
+@staff_required
 def get_pending_orders():
     """US 3.1: Admin can view all pending orders."""
     orders = db.session.execute(
@@ -18,7 +18,7 @@ def get_pending_orders():
 
 @staff_bp.route("/verify-order/<int:order_id>", methods=["GET", "POST"])
 @login_required
-@admin_only
+@staff_required
 def verify_order(order_id):
     """US 3.1 & 4.1: Confirm clothes match and generate price."""
     order = db.session.get(Order, order_id)
