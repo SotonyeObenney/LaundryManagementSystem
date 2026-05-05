@@ -1,5 +1,5 @@
 from flask import Flask
-from .extensions import db, login_manager, bcrypt, migrate
+from .extensions import db, login_manager, bcrypt, migrate, mail
 from config import Config
 from dotenv import load_dotenv
 
@@ -14,6 +14,7 @@ def create_app():
     migrate.init_app(app, db)
     bcrypt.init_app(app)
     login_manager.init_app(app)
+    mail.init_app(app)
 
     @login_manager.user_loader
     def load_user(user_id):
