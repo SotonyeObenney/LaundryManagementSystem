@@ -6,6 +6,22 @@ from ..extensions import db
 from ..utils.decorators import staff_required 
 from ..utils.email import send_verification_alert 
 
+
+@staff_bp.route("/dashboard")
+@login_required
+@staff_required
+def dashboard():
+    """The Command Center: Business Health & Navigation."""
+    # Analytics for the 'Health of the Business' (Requirement 1.2 Performance)
+    stats = {
+        'total_pending': db.session.query(Order).filter_by(status='pending').count(),
+        'total_verified': db.session.query(Order).filter_by(status='verified').count(),
+        'today_revenue': db.session.query(db.func.sum(Order.total_price)).filter(Order.status == 'paid').scalar() or 0,
+        'active_customers': db.session.query(User).filter_by(role='student').count()
+    }
+    return render_template("staff/dashboard.html", stats=stats)
+
+
 @staff_bp.route("/pending-orders")
 @login_required
 @staff_required
@@ -38,7 +54,7 @@ def verify_order(order_id):
                 item.quantity = physical_count
                 total_items += physical_count
 
-        # Check 30-item limit (SRS Requirement)
+        # 2. Check 30-item limit (SRS Requirement)
         if total_items > 30:
             order.status = "limit_exceeded"
             # US 3.1: Trigger email notification
@@ -47,6 +63,7 @@ def verify_order(order_id):
         else:
             # US 3.1 & 4.1: Finalize Verification and Price
             order.status = "verified"
+            # Calculate total based on verified items + delivery fee
             item_total = sum(i.quantity * i.price for i in order.items)
             order.total_price = item_total + order.delivery_fee
             flash(f"Order #{order.id} verified. Total: ₦{order.total_price}", "success")
@@ -54,4 +71,4 @@ def verify_order(order_id):
         db.session.commit()
         return redirect(url_for('staff.dashboard'))
 
-    return render_template("staff/verify-orders.html", order=order)
+    return render_template("staff/verify.html", order=order)
