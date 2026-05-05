@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required
 from . import staff_bp
-from ..models import Order
+from ..models import Order, User
 from ..extensions import db
 from ..utils.decorators import staff_required 
 from ..utils.email import send_verification_alert 
