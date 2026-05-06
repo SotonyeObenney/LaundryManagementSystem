@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-10">
+    <header class="mb-10">
+        <h1 class="text-4xl font-black text-gray-900">Admin Command Center</h1>
+        <p class="text-gray-500 text-lg">Real-time metrics for Nile Laundry operations.</p>
+    </header>
+
+    <!-- Business Health Metrics -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <div class="bg-indigo-600 p-8 rounded-3xl shadow-xl text-white">
+            <h3 class="text-indigo-100 text-sm font-bold uppercase tracking-widest">Pending Orders</h3>
+            <p class="text-5xl font-black mt-2">{{ stats.total_pending }}</p>
+            <a href="{{ url_for('staff.get_pending_orders') }}" class="mt-4 inline-block text-sm bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition">Process Queue →</a>
+        </div>
+
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+            <h3 class="text-gray-400 text-sm font-bold uppercase tracking-widest">Revenue (Today)</h3>
+            <p class="text-4xl font-black text-gray-900 mt-2">₦{{ "{:,.0f}".format(stats.today_revenue) }}</p>
+            <span class="text-green-500 text-xs font-bold">● Live from Paystack</span>
+        </div>
+
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+            <h3 class="text-gray-400 text-sm font-bold uppercase tracking-widest">Verified Orders</h3>
+            <p class="text-4xl font-black text-gray-900 mt-2">{{ stats.total_verified }}</p>
+        </div>
+
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+            <h3 class="text-gray-400 text-sm font-bold uppercase tracking-widest">Total Students</h3>
+            <p class="text-4xl font-black text-gray-900 mt-2">{{ stats.active_customers }}</p>
+        </div>
+    </div>
+
+    <!-- Quick Navigation Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-gray-900 p-10 rounded-3xl text-white">
+            <h2 class="text-2xl font-bold mb-4">Operations</h2>
+            <div class="space-y-4">
+                <button onclick="location.href='{{ url_for('staff.get_pending_orders') }}'" class="w-full text-left p-4 bg-white/10 hover:bg-white/20 rounded-2xl transition flex justify-between items-center">
+                    <span>Process New Laundry Arrivals</span>
+                    <span class="bg-indigo-500 text-xs px-2 py-1 rounded">Action Required</span>
+                </button>
+                <button class="w-full text-left p-4 bg-white/10 hover:bg-white/20 rounded-2xl transition">Customer Records & History</button>
+            </div>
+        </div>
+        
+        <div class="bg-white p-10 rounded-3xl border border-gray-100">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Reports</h2>
+            <div class="space-y-4">
+                <button class="w-full text-left p-4 bg-gray-50 hover:bg-gray-100 rounded-2xl transition">Weekly Financial Summary</button>
+                <button class="w-full text-left p-4 bg-gray-50 hover:bg-gray-100 rounded-2xl transition">Service Type Popularity</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

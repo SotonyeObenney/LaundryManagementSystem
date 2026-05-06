@@ -1,18 +1,47 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container">
-    <h2>My Laundry Orders</h2>
-    {% for order in orders %}
-        <div style="border: 1px solid #ccc; margin-bottom: 10px; padding: 10px;">
-            <p><strong>Order ID:</strong> {{ order.id }}</p>
-            <p><strong>Status:</strong> {{ order.status }}</p>
-            <p><strong>Total:</strong> ₦{{ order.total_price }}</p>
-            <ul>
-                {% for item in order.items %}
-                    <li>{{ item.item_type }}: {{ item.quantity }}</li>
-                {% endfor %}
-            </ul>
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-extrabold text-gray-900">My Laundry Orders</h1>
+        <a href="{{ url_for('bookings.create_order') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold transition shadow-lg">
+            + New Order
+        </a>
+    </div>
+
+    <div class="grid gap-6">
+        {% for order in orders %}
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <p class="text-sm text-gray-500 font-medium uppercase tracking-wider">Order #{{ order.id }}</p>
+                <h3 class="text-xl font-bold text-gray-800">{{ order.service_type }}</h3>
+                <p class="text-gray-500">{{ order.order_date.strftime('%d %b, %Y') }}</p>
+            </div>
+            
+            <div class="flex items-center gap-8">
+                <div class="text-center">
+                    <p class="text-sm text-gray-400 uppercase">Status</p>
+                    <span class="px-4 py-1 rounded-full text-sm font-bold 
+                        {% if order.status == 'pending' %} bg-yellow-100 text-yellow-700
+                        {% elif order.status == 'verified' %} bg-blue-100 text-blue-700
+                        {% elif order.status == 'paid' %} bg-green-100 text-green-700
+                        {% else %} bg-gray-100 text-gray-700 {% endif %}">
+                        {{ order.status.title() }}
+                    </span>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm text-gray-400 uppercase">Total</p>
+                    <p class="text-xl font-black text-gray-900">₦{{ "{:,.2f}".format(order.total_price) }}</p>
+                </div>
+                {% if order.status == 'verified' %}
+                <a href="#" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-bold transition">Pay Now</a>
+                {% endif %}
+            </div>
         </div>
-    {% endfor %}
+        {% else %}
+        <div class="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
+            <p class="text-gray-500 text-lg">No orders yet. Ready to get clean?</p>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

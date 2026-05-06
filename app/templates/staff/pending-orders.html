@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <nav class="flex gap-4 mb-8">
+        <a href="{{ url_for('staff.dashboard') }}" class="text-gray-500 hover:text-indigo-600 font-bold">Dashboard</a>
+        <span class="text-gray-300">/</span>
+        <a href="#" class="text-indigo-600 font-bold underline">Pending Orders</a>
+    </nav>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="w-full text-left border-collapse">
+            <thead class="bg-gray-50 border-b border-gray-100">
+                <tr>
+                    <th class="p-6 text-sm font-bold text-gray-500 uppercase">Order ID</th>
+                    <th class="p-6 text-sm font-bold text-gray-500 uppercase">Student</th>
+                    <th class="p-6 text-sm font-bold text-gray-500 uppercase">Items</th>
+                    <th class="p-6 text-sm font-bold text-gray-500 uppercase">Action</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+                {% for order in orders %}
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="p-6 font-bold">#{{ order.id }}</td>
+                    <td class="p-6">
+                        <p class="font-medium text-gray-900">{{ order.customer.name }}</p>
+                        <p class="text-xs text-gray-400">{{ order.customer.email }}</p>
+                    </td>
+                    <td class="p-6 text-gray-600">
+                        {{ order.items|length }} categories
+                    </td>
+                    <td class="p-6">
+                        <a href="{{ url_for('staff.verify_order', order_id=order.id) }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-indigo-700">
+                            Verify Count
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

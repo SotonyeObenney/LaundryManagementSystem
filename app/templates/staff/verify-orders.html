@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto py-12 px-4">
+    <div class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden">
+        <!-- Header -->
+        <div class="bg-gray-900 p-10 text-white flex justify-between items-end">
+            <div>
+                <span class="text-indigo-400 font-bold uppercase tracking-widest text-sm">Verification Phase</span>
+                <h1 class="text-3xl font-black mt-2">Order #{{ order.id }}</h1>
+            </div>
+            <div class="text-right">
+                <p class="text-gray-400 text-sm">Customer</p>
+                <p class="font-bold text-lg">{{ order.customer.name }}</p>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <form method="POST" class="p-10">
+            <div class="mb-8">
+                <h3 class="text-gray-900 font-bold text-xl mb-4">Physical Count Audit</h3>
+                <p class="text-gray-500 text-sm italic">Note: If physical count > 30, the system will auto-notify the student.</p>
+            </div>
+
+            <div class="space-y-4">
+                {% for item in order.items %}
+                <div class="flex items-center justify-between p-6 bg-gray-50 rounded-3xl border border-gray-100">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
+                            <span class="text-2xl">👕</span>
+                        </div>
+                        <div>
+                            <p class="font-black text-gray-800">{{ item.item_type }}</p>
+                            <p class="text-xs text-gray-400 font-bold uppercase">Student Claimed: {{ item.quantity }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-4">
+                        <label class="text-sm font-bold text-gray-400">Actual:</label>
+                        <input type="number" name="item_{{ item.id }}" value="{{ item.quantity }}" 
+                               class="w-24 p-3 bg-white border-2 border-gray-200 rounded-2xl text-center font-bold text-indigo-600 focus:border-indigo-500 outline-none transition">
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="mt-12 flex gap-6">
+                <button type="submit" class="flex-[2] bg-indigo-600 hover:bg-indigo-700 text-white py-5 rounded-3xl font-black text-xl transition transform hover:scale-[1.02] shadow-xl shadow-indigo-200">
+                    Verify & Calculate Price
+                </button>
+                <a href="{{ url_for('staff.get_pending_orders') }}" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-500 py-5 rounded-3xl font-bold text-center transition">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
