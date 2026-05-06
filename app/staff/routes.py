@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required
 from . import staff_bp
 from ..models import Order, User
@@ -72,3 +72,19 @@ def verify_order(order_id):
         return redirect(url_for('staff.dashboard'))
 
     return render_template("staff/verify.html", order=order)
+
+
+# ----------- Test email(mailtrap) with fake data --------
+@staff_bp.route("/test-email")
+@staff_required
+def test_email_flow():
+    # Provide fake data
+    recipient = "student-test@example.com"
+    order_id = 12345
+    issues = ["Jeans: Found 5, expected 1", "T-shirts: Found 20, expected 15"]
+    
+    try:
+        send_verification_alert(recipient, order_id, issues)
+        return "<h3>Email task started!</h3>Check your Mailtrap Sandbox inbox in a few seconds."
+    except Exception as e:
+        return f"<h3>It failed!</h3> Error: {str(e)}"
