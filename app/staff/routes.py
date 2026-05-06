@@ -57,8 +57,6 @@ def verify_order(order_id):
         # 2. Check 30-item limit (SRS Requirement)
         if total_items > 30:
             order.status = "limit_exceeded"
-            # US 3.1: Trigger email notification
-            send_verification_alert(order.customer.email, order.id, mismatched_categories)
             flash("Order exceeds 30 items. Student notified.", "warning")
         else:
             # US 3.1 & 4.1: Finalize Verification and Price
@@ -67,6 +65,10 @@ def verify_order(order_id):
             item_total = sum(i.quantity * i.price for i in order.items)
             order.total_price = item_total + order.delivery_fee
             flash(f"Order #{order.id} verified. Total: ₦{order.total_price}", "success")
+
+        if total_items > 30 or len(mismatched_categories) > 0: 
+            # US 3.1: Trigger email notification
+            send_verification_alert(order.customer.email, order.id, mismatched_categories, total_items)
 
         db.session.commit()
         return redirect(url_for('staff.dashboard'))
