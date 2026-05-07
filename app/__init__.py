@@ -1,7 +1,9 @@
 from flask import Flask
 from .extensions import db, login_manager, bcrypt, migrate, mail
 from config import Config
+from dotenv import load_dotenv
 
+load_dotenv
 
 def create_app():
     app = Flask(__name__)    
