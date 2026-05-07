@@ -14,10 +14,10 @@ def dashboard():
     """The Command Center: Business Health & Navigation."""
     # Analytics for the 'Health of the Business' (Requirement 1.2 Performance)
     stats = {
-        'total_pending': db.session.query(Order).filter_by(status='pending').count(),
-        'total_verified': db.session.query(Order).filter_by(status='verified').count(),
-        'today_revenue': db.session.query(db.func.sum(Order.total_price)).filter(Order.status == 'paid').scalar() or 0,
-        'active_customers': db.session.query(User).filter_by(role='customer').count()
+        'total_pending': db.session.execute(db.select(db.func.count(Order.id)).where(Order.status.in_(['pending', 'received']))).scalar(),
+        'total_verified': db.session.execute(db.select(db.func.count(Order.id)).where(Order.status == 'verified')).scalar(),
+        'today_revenue': db.session.execute(db.select(db.func.sum(Order.total_price)).where(Order.status == 'paid')).scalar() or 0,
+        'active_customers': db.session.execute(db.select(db.func.count(User.id)).where(User.role == 'customer')).scalar()
     }
     return render_template("staff/dashboard.html", stats=stats)
 
