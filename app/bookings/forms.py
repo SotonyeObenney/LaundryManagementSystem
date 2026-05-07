@@ -13,4 +13,4 @@ class OrderForm(FlaskForm):
     light_wear = IntegerField("Light Wear (Underwear/Socks)", default=0, validators=[NumberRange(min=0)])
     heavy_wear = IntegerField("Heavy Wear (Jackets/Bedding)", default=0, validators=[NumberRange(min=0)])
     
-    submit = SubmitField("Place Order")
+    submit = SubmitField("Place Laundry Order")

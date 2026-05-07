@@ -75,7 +75,7 @@ def create_order():
         
         
         flash("Order placed successfully! Please wait for staff verification.", "success")
-        return redirect(url_for('auth.register')) # Change to Dashboard later
+        return redirect(url_for('bookings.my_orders')) # Change to Dashboard later
 
     return render_template("bookings/create.html", form=form)
 

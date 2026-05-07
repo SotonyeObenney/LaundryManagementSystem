@@ -31,24 +31,31 @@
         </div>
     </div>
 
-    <!-- Quick Navigation Grid -->
+        <!-- Quick Navigation Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="bg-gray-900 p-10 rounded-3xl text-white">
             <h2 class="text-2xl font-bold mb-4">Operations</h2>
             <div class="space-y-4">
-                <button onclick="location.href='{{ url_for('staff.get_pending_orders') }}'" class="w-full text-left p-4 bg-white/10 hover:bg-white/20 rounded-2xl transition flex justify-between items-center">
+                <a href="{{ url_for('staff.get_pending_orders') }}" class="block w-full text-left p-4 bg-white/10 hover:bg-white/20 rounded-2xl transition flex justify-between items-center">
                     <span>Process New Laundry Arrivals</span>
                     <span class="bg-indigo-500 text-xs px-2 py-1 rounded">Action Required</span>
-                </button>
-                <button class="w-full text-left p-4 bg-white/10 hover:bg-white/20 rounded-2xl transition">Customer Records & History</button>
+                </a>
+                
+                <a href="#" class="block w-full text-left p-4 bg-white/10 hover:bg-white/20 rounded-2xl transition">
+                    Customer Records & History
+                </a>
             </div>
         </div>
-        
+
         <div class="bg-white p-10 rounded-3xl border border-gray-100">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Reports</h2>
             <div class="space-y-4">
-                <button class="w-full text-left p-4 bg-gray-50 hover:bg-gray-100 rounded-2xl transition">Weekly Financial Summary</button>
-                <button class="w-full text-left p-4 bg-gray-50 hover:bg-gray-100 rounded-2xl transition">Service Type Popularity</button>
+                <a href="#" class="block w-full text-left p-4 bg-gray-50 hover:bg-gray-100 rounded-2xl transition">
+                    Weekly Financial Summary
+                </a>
+                <a href="#" class="block w-full text-left p-4 bg-gray-50 hover:bg-gray-100 rounded-2xl transition">
+                    Service Type Popularity
+                </a>
             </div>
         </div>
     </div>

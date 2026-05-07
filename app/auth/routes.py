@@ -1,6 +1,6 @@
 from ..auth import auth_bp
 from flask import render_template, url_for, flash, redirect
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 from .forms import RegistrationForm, LoginForm   
 from .. import bcrypt
 from ..models import User
@@ -8,6 +8,8 @@ from ..extensions import db
 
 @auth_bp.route("/register", methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('bookings.my_orders'))
     form = RegistrationForm()
 
     # 1. Validate the form submission 
@@ -31,13 +33,17 @@ def register():
 
 @auth_bp.route("/login", methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('bookings.my_orders'))
     form = LoginForm()
     if form.validate_on_submit():
         user = db.session.execute(db.select(User).where(User.email==form.email.data)).scalar()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user)
             flash('Login Successful!', 'success')
-            return redirect(url_for('auth.register')) # Change to dashboard later
+            if user.role == "staff":
+                return redirect(url_for('staff.dashboard'))
+            return redirect(url_for('bookings.my_orders')) # Change to dashboard later
         flash('Login unsuccessful. Please check email and password', 'danger')
     return render_template('auth/login.html', form=form)
 
@@ -45,4 +51,4 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for("auth.register"))  # Change to home page later
+    return redirect(url_for("auth.login"))  # Change to home page later

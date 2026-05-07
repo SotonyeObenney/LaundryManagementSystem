@@ -15,7 +15,7 @@ body {
   margin:0px;
   font-family: "Poppins", sans-serif;
   background-color: #f8fafc;
-  background-image: url("laundryimg.jpeg");
+  /* background-image: url("laundryimg.jpeg"); */
 }
 
 /* Unified Auth Styles */

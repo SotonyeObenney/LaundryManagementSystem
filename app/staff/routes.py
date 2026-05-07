@@ -17,7 +17,7 @@ def dashboard():
         'total_pending': db.session.query(Order).filter_by(status='pending').count(),
         'total_verified': db.session.query(Order).filter_by(status='verified').count(),
         'today_revenue': db.session.query(db.func.sum(Order.total_price)).filter(Order.status == 'paid').scalar() or 0,
-        'active_customers': db.session.query(User).filter_by(role='student').count()
+        'active_customers': db.session.query(User).filter_by(role='customer').count()
     }
     return render_template("staff/dashboard.html", stats=stats)
 
@@ -30,7 +30,7 @@ def get_pending_orders():
     orders = db.session.execute(
         db.select(Order).where(Order.status.in_(['pending', 'received']))
     ).scalars().all()
-    return render_template("staff/pending_orders.html", orders=orders)
+    return render_template("staff/pending-orders.html", orders=orders)
 
 @staff_bp.route("/verify-order/<int:order_id>", methods=["GET", "POST"])
 @login_required
@@ -73,7 +73,9 @@ def verify_order(order_id):
         db.session.commit()
         return redirect(url_for('staff.dashboard'))
 
-    return render_template("staff/verify.html", order=order)
+    return render_template("staff/verify-orders.html", order=order)
+
+
 
 
 # ----------- Test email(mailtrap) with fake data --------
