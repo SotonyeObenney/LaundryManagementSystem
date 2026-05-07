@@ -1,7 +1,6 @@
 from flask import Flask
 from .extensions import db, login_manager, bcrypt, migrate, mail
 from config import Config
-from dotenv import load_dotenv
 
 
 def create_app():
@@ -25,8 +24,10 @@ def create_app():
     from app.auth import auth_bp
     from app.bookings import bookings_bp
     from app.staff import staff_bp
+    from app.main import main_bp
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(bookings_bp, url_prefix="/bookings")
     app.register_blueprint(staff_bp, url_prefix="/staff")
+    app.register_blueprint(main_bp, url_prefix="/")
 
     return app
