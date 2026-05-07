@@ -1,25 +1,68 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}LMS{% endblock %}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nile Laundry Pulse</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='auth/style.css') }}" />    {% block extra_head %}{% endblock %}
-  </head>
-  <body>
-    <div class="flash-container" style="max-width: 450px; margin: 1rem auto; text-align: center;">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          {% for category, message in messages %}
-            <div class="flash-msg msg-{{ category }}">
-              {{ message }}
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='auth/style.css') }}" /> 
+    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+    <!-- NAVIGATION BAR -->
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <div class="flex items-center">
+                    <a href="{{ url_for('main.home') }}" class="text-2xl font-black tracking-tighter text-indigo-600">
+                        NILE<span class="text-gray-900">PULSE</span>
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    {% if current_user.is_authenticated %}
+                        <!-- This uses your new redirect logic -->
+                        <a href="{{ url_for('main.dashboard_redirect') }}" class="font-semibold hover:text-indigo-600 transition">Dashboard</a>
+                        
+                        {% if current_user.role == 'customer' %}
+                            <a href="{{ url_for('bookings.create_order') }}" class="font-semibold hover:text-indigo-600 transition">Book Laundry</a>
+                        {% endif %}
+
+                        <div class="flex items-center gap-4 ml-4 pl-4 border-l border-gray-200">
+                            <span class="text-sm font-medium text-gray-500">{{ current_user.name }}</span>
+                            <a href="{{ url_for('auth.logout') }}" class="text-sm font-bold text-red-500 hover:text-red-600">Logout</a>
+                        </div>
+                    {% else %}
+                        <a href="{{ url_for('main.home') }}" class="font-semibold hover:text-indigo-600 transition">Home</a>
+                        <a href="{{ url_for('auth.login') }}" class="font-semibold hover:text-indigo-600 transition">Login</a>
+                        <a href="{{ url_for('auth.register') }}" class="bg-indigo-600 text-white px-6 py-2.5 rounded-full font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">
+                            Get Started
+                        </a>
+                    {% endif %}
+                </div>
             </div>
-          {% endfor %}
-        {% endif %}
-      {% endwith %}
+        </div>
+    </nav>
+
+    <!-- FLASH MESSAGES -->
+    <div class="max-w-7xl mx-auto px-4 mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="p-4 rounded-xl mb-4 font-bold {% if category == 'success' %} bg-green-100 text-green-700 {% else %} bg-red-100 text-red-700 {% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
     </div>
-    {% block content %}{% endblock %}
-  </body>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
 </html>
