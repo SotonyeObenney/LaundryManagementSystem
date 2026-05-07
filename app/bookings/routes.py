@@ -93,3 +93,20 @@ def my_orders():
     ).scalars().unique().all()
     
     return render_template("bookings/dashboard.html", orders=orders)
+
+
+@bookings_bp.route("/order/<int:order_id>/invoice")
+@login_required
+def view_invoice(order_id):
+    """US 4.1: Display itemized breakdown before payment."""
+    order = db.session.execute(
+        db.select(Order)
+        .where(Order.id == order_id, Order.customer_id == current_user.id)
+        .options(joinedload(Order.items))
+    ).scalars().first()
+
+    if not order:
+        flash("Order not found.", "danger")
+        return redirect(url_for('bookings.my_orders'))
+
+    return render_template("bookings/invoice.html", order=order)
