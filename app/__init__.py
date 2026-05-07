@@ -19,6 +19,11 @@ def create_app():
     def load_user(user_id):
         from .models import User
         return db.session.get(User, user_id)
+    
+    # Customize currency filter
+    @app.template_filter('currency')
+    def currency_filter(value):
+        return "₦{:,.2f}".format(value)
 
     # 4. REGISTER BLUEPRINTS
     from app.auth import auth_bp
