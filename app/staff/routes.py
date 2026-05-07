@@ -32,6 +32,17 @@ def get_pending_orders():
     ).scalars().all()
     return render_template("staff/pending-orders.html", orders=orders)
 
+@staff_bp.route("/receive-order/<int:order_id>", methods=["POST"])
+@login_required
+@staff_required
+def receive_order(order_id):
+    order = db.session.get(Order, order_id)
+    if order:
+        order.status = "received"
+        db.session.commit()
+        flash(f"Order #{order.id} marked as Received.", "info")
+    return redirect(url_for('staff.get_pending_orders'))
+
 @staff_bp.route("/verify-order/<int:order_id>", methods=["GET", "POST"])
 @login_required
 @staff_required
