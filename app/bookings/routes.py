@@ -5,6 +5,9 @@ from . import bookings_bp
 from .forms import OrderForm
 from ..models import Service, Order, OrderItem
 from ..extensions import db
+import requests
+import os
+
 
 @bookings_bp.route("/create", methods=["GET", "POST"])
 @login_required
@@ -110,3 +113,77 @@ def view_invoice(order_id):
         return redirect(url_for('bookings.my_orders'))
 
     return render_template("bookings/invoice.html", order=order)
+
+
+@bookings_bp.route("/pay/<int:order_id>")
+@login_required
+def initialize_payment(order_id):
+    order = db.session.get(Order, order_id)
+    
+    if not order or order.status != 'verified':
+        flash("Order is not ready for payment.", "warning")
+        return redirect(url_for('bookings.my_orders'))
+
+    # Paystack expects amount in KOBO (multiply Naira by 100)
+    amount_in_kobo = int(order.total_price * 100)
+    
+    url = "https://api.paystack.co/transaction/initialize"
+    headers = {
+        "Authorization": f"Bearer {os.getenv('PAYSTACK_SECRET_KEY')}",
+        "Content-Type": "application/json"
+    }
+    body = {
+        "email": current_user.email,
+        "amount": amount_in_kobo,
+        "callback_url": url_for('bookings.payment_callback', _external=True),
+        "metadata": {
+            "order_id": order.id,
+            "custom_fields": [
+                {"display_name": "Order ID", "variable_name": "order_id", "value": order.id}
+            ]
+        }
+    }
+
+    try:
+        response = requests.post(url, headers=headers, json=body)
+        res_data = response.json()
+
+        if res_data['status']:
+            # Redirect the user to Paystack's secure checkout page
+            return redirect(res_data['data']['authorization_url'])
+        else:
+            flash("Paystack initialization failed. Try again.", "danger")
+            return redirect(url_for('bookings.view_invoice', order_id=order.id))
+
+    except Exception as e:
+        print(f"Payment Error: {e}")
+        flash("Could not connect to payment gateway.", "danger")
+        return redirect(url_for('bookings.view_invoice', order_id=order.id))
+
+
+@bookings_bp.route("/payment/callback")
+@login_required
+def payment_callback():
+    reference = request.args.get('reference')
+    
+    # Verify the transaction with Paystack
+    url = f"https://api.paystack.co/transaction/verify/{reference}"
+    headers = {"Authorization": f"Bearer {os.getenv('PAYSTACK_SECRET_KEY')}"}
+    
+    response = requests.get(url, headers=headers)
+    res_data = response.json()
+
+    if res_data['status'] and res_data['data']['status'] == 'success':
+        # Get the Order ID we stored in metadata
+        order_id = res_data['data']['metadata']['order_id']
+        order = db.session.get(Order, order_id)
+        
+        if order:
+            order.status = 'paid'
+            # US 4.2: Payment status updates to "Paid"
+            db.session.commit()
+            flash("Payment Successful! Your laundry is being processed.", "success")
+            return redirect(url_for('bookings.my_orders'))
+
+    flash("Payment verification failed.", "danger")
+    return redirect(url_for('bookings.my_orders'))
