@@ -5,7 +5,9 @@ from flask_login import current_user, login_required
 
 @main_bp.route("/")
 def home():
-    return "Welcome to our laundry service."
+    if current_user.is_authenticated:
+        return redirect(url_for('main.dashboard_redirect'))
+    return render_template("main/index.html")
 
 @main_bp.route("/dashboard")
 @login_required
