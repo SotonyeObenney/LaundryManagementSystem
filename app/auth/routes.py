@@ -34,16 +34,14 @@ def register():
 @auth_bp.route("/login", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('bookings.my_orders'))
+        return redirect(url_for('main.dashboard_redirect'))
     form = LoginForm()
     if form.validate_on_submit():
         user = db.session.execute(db.select(User).where(User.email==form.email.data)).scalar()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user)
             flash('Login Successful!', 'success')
-            if user.role == "staff":
-                return redirect(url_for('staff.dashboard'))
-            return redirect(url_for('bookings.my_orders')) # Change to dashboard later
+            return redirect(url_for('main.dashboard_redirect'))
         flash('Login unsuccessful. Please check email and password', 'danger')
     return render_template('auth/login.html', form=form)
 
