@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-12">
+    <div class="mb-10">
+        <h1 class="text-4xl font-black text-gray-900">Pickup Desk</h1>
+        <p class="text-gray-500">Verify the Student's Order ID before handing over the laundry.</p>
+    </div>
+
+    <div class="space-y-4">
+        {% for order in orders %}
+        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex justify-between items-center">
+            <div>
+                <span class="text-xs font-black text-indigo-600 bg-indigo-50 px-2 py-1 rounded">ID: #{{ order.id }}</span>
+                <h3 class="text-xl font-bold text-gray-900 mt-2">{{ order.customer.name }}</h3>
+                <p class="text-gray-500 text-sm">Service: {{ order.service_type }}</p>
+            </div>
+
+            <form action="{{ url_for('staff.confirm_delivery', order_id=order.id) }}" method="POST">
+                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-2xl font-black transition shadow-lg shadow-green-100">
+                    Confirm Handover
+                </button>
+            </form>
+        </div>
+        {% else %}
+        <div class="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed">
+            <p class="text-gray-400">No orders are currently out for delivery.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

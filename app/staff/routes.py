@@ -17,7 +17,7 @@ def dashboard():
         'total_pending': db.session.execute(db.select(db.func.count(Order.id)).where(Order.status.in_(['pending', 'received']))).scalar(),
         'total_verified': db.session.execute(db.select(db.func.count(Order.id)).where(Order.status == 'verified')).scalar(),
         'total_paid': db.session.execute(db.select(db.func.count(Order.id)).where(Order.status == 'paid')).scalar(),
-        'today_revenue': db.session.execute(db.select(db.func.sum(Order.total_price)).where(Order.status == 'paid')).scalar() or 0,
+        'today_revenue': db.session.execute(db.select(db.func.sum(Order.total_price)).where(Order.status.in_(['paid', 'out_for_delivery', 'delivered']))).scalar() or 0,
         'active_customers': db.session.execute(db.select(db.func.count(User.id)).where(User.role == 'customer')).scalar()
     }
     return render_template("staff/dashboard.html", stats=stats)
@@ -80,6 +80,7 @@ def verify_order(order_id):
 
         if total_items > 30 or len(mismatched_categories) > 0: 
             # US 3.1: Trigger email notification
+            print(total_items)
             send_verification_alert(order.customer.email, order.id, mismatched_categories, total_items)
 
         db.session.commit()
@@ -98,7 +99,40 @@ def get_paid_orders():
     ).scalars().all()
     return render_template("staff/paid-orders.html", orders=orders)
 
+@staff_bp.route("/dispatch-order/<int:order_id>", methods=["POST"])
+@login_required
+@staff_required
+def dispatch_order(order_id):
+    """US 5.2: Mark order as Out for Delivery."""
+    order = db.session.get(Order, order_id)
+    if order and order.status == 'paid':
+        order.status = 'out_for_delivery'
+        db.session.commit()
+        flash(f"Order #{order.id} is now out for delivery!", "success")
+        return redirect(url_for('staff.get_paid_orders'))
 
+
+@staff_bp.route("/delivery-queue")
+@login_required
+@staff_required
+def delivery_queue():
+    """US 5.3: The final stage. Orders waiting for handover."""
+    orders = db.session.execute(
+        db.select(Order).where(Order.status == 'out_for_delivery')
+    ).scalars().all()
+    return render_template("staff/delivery-queue.html", orders=orders)
+
+@staff_bp.route("/confirm-delivery/<int:order_id>", methods=["POST"])
+@login_required
+@staff_required
+def confirm_delivery(order_id):
+    """US 5.3: Verification of Order ID and final handover."""
+    order = db.session.get(Order, order_id)
+    if order and order.status == 'out_for_delivery':
+        order.status = 'delivered'
+        db.session.commit()
+        flash(f"Order #{order.id} handed over to {order.customer.name}!", "success")
+    return redirect(url_for('staff.delivery_queue'))
 
 
 

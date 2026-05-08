@@ -7,6 +7,8 @@ from ..models import Service, Order, OrderItem
 from ..extensions import db
 import requests
 import os
+from ..utils.helper import calculate_delivery_date_with_cutoff
+from datetime import datetime
 
 
 @bookings_bp.route("/create", methods=["GET", "POST"])
@@ -176,15 +178,15 @@ def payment_callback():
     print(f"Payment callback: {res_data}")
 
     if res_data['status'] and res_data['data']['status'] == 'success':
-        # Get the Order ID we stored in metadata
+        # Get the Order ID stored in metadata
         order_id = res_data['data']['metadata']['order_id']
         order = db.session.get(Order, order_id)
         
         if order:
             order.status = 'paid'
-            # US 4.2: Payment status updates to "Paid"
+            order.delivery_date = calculate_delivery_date_with_cutoff(datetime.now())
             db.session.commit()
-            flash("Payment Successful! Your laundry is being processed.", "success")
+            flash(f"Payment Successful! Your delivery is scheduled for {order.delivery_date.strftime('%A, %b %d')}.", "success")            
             return redirect(url_for('bookings.my_orders'))
 
     flash("Payment verification failed.", "danger")
