@@ -1,60 +1,120 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-6xl mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-extrabold text-gray-900">My Laundry Orders</h1>
-        <a href="{{ url_for('bookings.create_order') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold transition shadow-lg">
-            + New Order
+<div class="max-w-7xl mx-auto px-4 py-10">
+    <!-- Header -->
+    <header class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
+        <div>
+            <h1 class="text-4xl font-black text-gray-900 tracking-tight">Welcome, {{ current_user.name.split()[0] }}!</h1>
+            <p class="text-gray-500 font-medium">Tracking your Nile Campus laundry excellence.</p>
+        </div>
+        <a href="{{ url_for('bookings.create_order') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-2xl font-black transition shadow-xl shadow-indigo-100 flex items-center gap-2">
+            <span>+</span> Start New Booking
         </a>
+    </header>
+
+    <!-- Lifetime Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm transition hover:shadow-md">
+            <p class="text-[10px] font-black uppercase text-gray-400 tracking-widest">Lifetime Spent</p>
+            <p class="text-3xl font-black text-gray-900 mt-1">₦{{ "{:,.2f}".format(stats.total_spent) }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm transition hover:shadow-md">
+            <p class="text-[10px] font-black uppercase text-gray-400 tracking-widest">Active Tracking</p>
+            <p class="text-3xl font-black text-indigo-600 mt-1">{{ stats.active_count }} <span class="text-sm font-medium text-gray-400">Orders</span></p>
+        </div>
+        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm transition hover:shadow-md">
+            <p class="text-[10px] font-black uppercase text-gray-400 tracking-widest">Clothes Cleaned</p>
+            <p class="text-3xl font-black text-green-600 mt-1">{{ stats.items_cleaned }} <span class="text-sm font-medium text-gray-400">Items</span></p>
+        </div>
     </div>
 
-    <div class="grid gap-6">
-        {% for order in orders %}
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col md:flex-row justify-between items-center">
-            <div class="mb-4 md:mb-0">
-                <p class="text-sm text-gray-500 font-medium uppercase tracking-wider">Order #{{ order.id }}</p>
-                <h3 class="text-xl font-bold text-gray-800">{{ order.service_type }}</h3>
-                <p class="text-gray-500">{{ order.order_date.strftime('%d %b, %Y') }}</p>
+    <!-- Active Orders Section -->
+    <section class="mb-16">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="h-2 w-2 bg-indigo-600 rounded-full animate-pulse"></div>
+            <h2 class="text-2xl font-black text-gray-900">Current Progress</h2>
+        </div>
+        
+        <div class="grid gap-6">
+            {% for order in active_orders %}
+            <div class="bg-white rounded-3xl shadow-sm border-2 border-indigo-50 p-6 flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-[10px] text-gray-400 font-black uppercase">Order #{{ order.id }}</p>
+                    <h3 class="text-xl font-bold text-gray-800">{{ order.service_type }}</h3>
+                    
+                    {% if order.delivery_date %}
+                    <div class="mt-2 inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 px-3 py-1 rounded-lg">
+                        <span class="text-xs font-black uppercase">📅 Ready: {{ order.delivery_date.strftime('%a, %d %b') }}</span>
+                    </div>
+                    {% endif %}
+                </div>
                 
-                <!-- SPRINT 4: Delivery Date Badge -->
-                {% if order.delivery_date %}
-                <div class="mt-3 flex items-center gap-2">
-                    <span class="text-[10px] bg-indigo-50 text-indigo-700 border border-indigo-100 px-2 py-1 rounded-md font-black uppercase tracking-tighter">
-                        📅 Delivery: {{ order.delivery_date.strftime('%a, %d %b') }}
-                    </span>
+                <div class="flex items-center gap-10">
+                    <div class="text-center">
+                        <p class="text-[10px] text-gray-400 uppercase font-black">Status</p>
+                        <span class="px-4 py-1 rounded-full text-xs font-black uppercase tracking-tighter
+                            {% if order.status == 'pending' %} bg-yellow-100 text-yellow-700
+                            {% elif order.status == 'verified' %} bg-blue-100 text-blue-700
+                            {% elif order.status == 'paid' %} bg-green-100 text-green-700
+                            {% elif order.status == 'out_for_delivery' %} bg-purple-100 text-purple-700
+                            {% else %} bg-gray-100 text-gray-700 {% endif %}">
+                            {{ order.status.replace('_', ' ').title() }}
+                        </span>
+                    </div>
+
+                    {% if order.status == 'verified' %}
+                        <a href="{{ url_for('bookings.view_invoice', order_id=order.id) }}" 
+                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-xl font-bold transition shadow-lg shadow-green-100">
+                        Pay ₦{{ "{:,.0f}".format(order.total_price) }}
+                        </a>
+                    {% else %}
+                        <div class="text-right">
+                            <p class="text-[10px] text-gray-400 uppercase font-black">Total</p>
+                            <p class="text-xl font-black text-gray-900">₦{{ "{:,.0f}".format(order.total_price) }}</p>
+                        </div>
+                    {% endif %}
                 </div>
-                {% endif %}
             </div>
-            
-            <div class="flex items-center gap-8">
-                <div class="text-center">
-                    <p class="text-sm text-gray-400 uppercase font-bold text-[10px]">Status</p>
-                    <span class="px-4 py-1 rounded-full text-sm font-bold 
-                        {% if order.status == 'pending' %} bg-yellow-100 text-yellow-700
-                        {% elif order.status == 'verified' %} bg-blue-100 text-blue-700
-                        {% elif order.status == 'paid' %} bg-green-100 text-green-700
-                        {% elif order.status == 'out_for_delivery' %} bg-purple-100 text-purple-700
-                        {% else %} bg-gray-100 text-gray-700 {% endif %}">
-                        {{ order.status.replace('_', ' ').title() }}
-                    </span>
-                </div>
-                <div class="text-right">
-                    <p class="text-sm text-gray-400 uppercase font-bold text-[10px]">Total</p>
-                    <p class="text-xl font-black text-gray-900">{{ order.total_price | currency }}</p>
-                </div>
-                {% if order.status == 'verified' %}
-                    <a href="{{ url_for('bookings.view_invoice', order_id=order.id) }}" 
-                    class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-bold transition shadow-md">
-                    View & Pay
-                    </a>
-                {% endif %}
+            {% else %}
+            <div class="text-center py-16 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
+                <p class="text-gray-400 font-bold">No active laundry. Want to start a fresh batch?</p>
             </div>
+            {% endfor %}
         </div>
-        {% else %}
-        <div class="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
-            <p class="text-gray-500 text-lg">No orders yet. Ready to get clean?</p>
+    </section>
+
+    <!-- Past Orders Section (History Table) -->
+    <section>
+        <h2 class="text-2xl font-black text-gray-900 mb-6">Laundry History</h2>
+        <div class="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50 border-b border-gray-100">
+                        <tr>
+                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase">Date</th>
+                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase">Service</th>
+                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase text-right">Amount</th>
+                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        {% for order in past_orders %}
+                        <tr class="hover:bg-gray-50/50 transition">
+                            <td class="px-6 py-4 text-sm font-medium text-gray-600">{{ order.order_date.strftime('%b %d, %Y') }}</td>
+                            <td class="px-6 py-4 text-sm font-bold text-gray-800">{{ order.service_type }}</td>
+                            <td class="px-6 py-4 text-sm font-black text-gray-900 text-right">₦{{ "{:,.0f}".format(order.total_price) }}</td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="text-[10px] font-black text-green-600 bg-green-50 px-2 py-1 rounded">COMPLETED</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% if not past_orders %}
+                <div class="p-8 text-center text-gray-400 italic text-sm">Your history will appear here once orders are delivered.</div>
+            {% endif %}
         </div>
-        {% endfor %}
-    </div>
+    </section>
 </div>
 {% endblock %}

@@ -8,7 +8,40 @@ from ..extensions import db
 import requests
 import os
 from ..utils.helper import calculate_delivery_date_with_cutoff
-from datetime import datetime
+from datetime import datetime, timedelta
+
+
+@bookings_bp.route("/dashboard")
+@login_required
+def dashboard():
+    # We use joinedload to fetch the items at the same time as the order
+    # This prevents the 'N+1' query problem (more efficient for the DB)
+    user_orders = db.session.execute(
+        db.select(Order)
+        .where(Order.customer_id == current_user.id)
+        .options(joinedload(Order.items))
+        .order_by(Order.order_date.desc())
+    ).scalars().unique().all()
+
+    # Calculate Lifetime Stats
+    stats = {
+        'total_spent': sum(o.total_price for o in user_orders if o.status == 'delivered'),
+        'total_orders': len(user_orders),
+        'active_count': len([o for o in user_orders if o.status not in ['delivered', 'cancelled']]),
+        # Nested sum to count all items across all delivered orders
+        'items_cleaned': sum(sum(item.quantity for item in o.items) for o in user_orders if o.status == 'delivered')
+    }
+
+    # Filter for the UI sections
+    active_orders = [o for o in user_orders if o.status not in ['delivered', 'cancelled']]
+    past_orders = [o for o in user_orders if o.status == 'delivered']
+
+    return render_template(
+        "bookings/dashboard.html", 
+        stats=stats, 
+        active_orders=active_orders, 
+        past_orders=past_orders
+    )
 
 
 @bookings_bp.route("/create", methods=["GET", "POST"])
@@ -80,24 +113,9 @@ def create_order():
         
         
         flash("Order placed successfully! Please wait for staff verification.", "success")
-        return redirect(url_for('bookings.my_orders')) # Change to Dashboard later
+        return redirect(url_for("bookings.dashboard")) 
 
     return render_template("bookings/create.html", form=form)
-
-
-@bookings_bp.route("/my-orders")
-@login_required
-def my_orders():
-    # We use joinedload to fetch the items at the same time as the order
-    # This prevents the 'N+1' query problem (more efficient for the DB)
-    orders = db.session.execute(
-        db.select(Order)
-        .where(Order.customer_id == current_user.id)
-        .options(joinedload(Order.items))
-        .order_by(Order.order_date.desc())
-    ).scalars().unique().all()
-    
-    return render_template("bookings/dashboard.html", orders=orders)
 
 
 @bookings_bp.route("/order/<int:order_id>/invoice")
@@ -112,7 +130,7 @@ def view_invoice(order_id):
 
     if not order:
         flash("Order not found.", "danger")
-        return redirect(url_for('bookings.my_orders'))
+        return redirect(url_for("bookings.dashboard"))
 
     return render_template("bookings/invoice.html", order=order)
 
@@ -124,7 +142,7 @@ def initialize_payment(order_id):
     
     if not order or order.status != 'verified':
         flash("Order is not ready for payment.", "warning")
-        return redirect(url_for('bookings.my_orders'))
+        return redirect(url_for("bookings.dashboard"))
 
     # Paystack expects amount in KOBO (multiply Naira by 100)
     amount_in_kobo = int(order.total_price * 100)
@@ -187,7 +205,7 @@ def payment_callback():
             order.delivery_date = calculate_delivery_date_with_cutoff(datetime.now())
             db.session.commit()
             flash(f"Payment Successful! Your delivery is scheduled for {order.delivery_date.strftime('%A, %b %d')}.", "success")            
-            return redirect(url_for('bookings.my_orders'))
+            return redirect(url_for("bookings.dashboard"))
 
     flash("Payment verification failed.", "danger")
-    return redirect(url_for('bookings.my_orders'))
+    return redirect(url_for("bookings.dashboard"))

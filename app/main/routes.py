@@ -14,4 +14,4 @@ def home():
 def dashboard_redirect():
     if current_user.role == 'staff':
         return redirect(url_for('staff.dashboard'))
-    return redirect(url_for("bookings.my_orders"))
+    return redirect(url_for("bookings.dashboard"))

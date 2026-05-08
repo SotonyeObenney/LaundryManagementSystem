@@ -41,7 +41,7 @@ def receive_order(order_id):
     if order:
         order.status = "received"
         db.session.commit()
-        flash(f"Order #{order.id} marked as Received.", "info")
+        flash(f"Order #{order.id} marked as Received.", "success")
     return redirect(url_for('staff.get_pending_orders'))
 
 @staff_bp.route("/verify-order/<int:order_id>", methods=["GET", "POST"])
