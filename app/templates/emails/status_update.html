@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .wrapper { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333; max-width: 600px; margin: 0 auto; }
+        .header { background: #9333ea; color: white; padding: 40px; text-align: center; border-radius: 24px 24px 0 0; }
+        .content { padding: 40px; border: 1px solid #f0f0f0; border-radius: 0 0 24px 24px; text-align: center; }
+        .order-id { display: inline-block; background: #faf5ff; color: #9333ea; font-weight: 800; padding: 10px 20px; border-radius: 12px; margin: 20px 0; font-size: 20px; border: 1px solid #e9d5ff; }
+        .instruction { background: #fffbeb; border: 1px solid #fef3c7; padding: 15px; border-radius: 16px; color: #92400e; font-size: 14px; margin-top: 25px; }
+        .footer { text-align: center; font-size: 11px; color: #cbd5e1; margin-top: 25px; text-transform: uppercase; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="header">
+            <h1 style="margin:0; font-size: 28px;">Your Laundry is Ready! 🧺</h1>
+            <p style="opacity: 0.9; margin-top: 10px;">It's on the way to the pickup point.</p>
+        </div>
+        <div class="content">
+            <p style="font-size: 18px; font-weight: 600;">Hi {{ order.customer.name.split()[0] }},</p>
+            <p>Great news! Your laundry for <strong>Order #{{ order.id }}</strong> has been processed and is now <strong>Out for Delivery</strong>.</p>
+            
+            <p style="margin-top: 30px; font-size: 14px; color: #64748b;">Show this Order ID at the Student Centre pickup desk:</p>
+            <div class="order-id">
+                #{{ order.id }}
+            </div>
+
+            <div class="instruction">
+                <strong>Pro-Tip:</strong> Please ensure you have your ID card or this email ready to verify your identity during handover.
+            </div>
+        </div>
+        <div class="footer">
+            <p>Nile Pulse • Nile University Abuja</p>
+        </div>
+    </div>
+</body>
+</html>
