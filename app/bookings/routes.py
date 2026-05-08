@@ -9,6 +9,7 @@ import requests
 import os
 from ..utils.helper import calculate_delivery_date_with_cutoff
 from datetime import datetime, timedelta
+from ..utils.notifications import send_order_update_email
 
 
 @bookings_bp.route("/dashboard")
@@ -204,6 +205,9 @@ def payment_callback():
             order.status = 'paid'
             order.delivery_date = calculate_delivery_date_with_cutoff(datetime.now())
             db.session.commit()
+
+            # US 6.1 & 6.2: Trigger the email receipt
+            send_order_update_email(order, template="receipt", subject="Payment Confirmation & Receipt")
             flash(f"Payment Successful! Your delivery is scheduled for {order.delivery_date.strftime('%A, %b %d')}.", "success")            
             return redirect(url_for("bookings.dashboard"))
 

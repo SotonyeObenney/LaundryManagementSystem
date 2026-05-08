@@ -13,7 +13,7 @@ def send_order_update_email(order, template, subject):
     """
     try:
         msg = Message(
-            subject=f"NaijaMarket Pulse: {subject} (Order #{order.id})",
+            subject=f"Nile Pulse: {subject} (Order #{order.id})",
             recipients=[order.customer.email]
         )
         # We pass the order object so the template can loop through order.items

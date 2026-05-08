@@ -5,6 +5,7 @@ from ..models import Order, User
 from ..extensions import db
 from ..utils.decorators import staff_required 
 from ..utils.email import send_verification_alert 
+from ..utils.notifications import send_order_update_email
 
 
 @staff_bp.route("/dashboard")
@@ -108,6 +109,9 @@ def dispatch_order(order_id):
     if order and order.status == 'paid':
         order.status = 'out_for_delivery'
         db.session.commit()
+
+        # US 6.2: Notify the student that their laundry is on the way
+        send_order_update_email(order, template="status_update", subject="Your Laundry is Ready for Pickup!")
         flash(f"Order #{order.id} is now out for delivery!", "success")
         return redirect(url_for('staff.get_paid_orders'))
 
