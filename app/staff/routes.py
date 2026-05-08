@@ -16,6 +16,7 @@ def dashboard():
     stats = {
         'total_pending': db.session.execute(db.select(db.func.count(Order.id)).where(Order.status.in_(['pending', 'received']))).scalar(),
         'total_verified': db.session.execute(db.select(db.func.count(Order.id)).where(Order.status == 'verified')).scalar(),
+        'total_paid': db.session.execute(db.select(db.func.count(Order.id)).where(Order.status == 'paid')).scalar(),
         'today_revenue': db.session.execute(db.select(db.func.sum(Order.total_price)).where(Order.status == 'paid')).scalar() or 0,
         'active_customers': db.session.execute(db.select(db.func.count(User.id)).where(User.role == 'customer')).scalar()
     }
@@ -87,19 +88,32 @@ def verify_order(order_id):
     return render_template("staff/verify-orders.html", order=order)
 
 
+@staff_bp.route("/paid-orders")
+@login_required
+@staff_required
+def get_paid_orders():
+    """US 4.3: Staff views only paid orders ready for processing."""
+    orders = db.session.execute(
+        db.select(Order).where(Order.status == 'paid')
+    ).scalars().all()
+    return render_template("staff/paid-orders.html", orders=orders)
+
+
+
 
 
 # ----------- Test email(mailtrap) with fake data --------
-@staff_bp.route("/test-email")
-@staff_required
-def test_email_flow():
-    # Provide fake data
-    recipient = "student-test@example.com"
-    order_id = 12345
-    issues = ["Jeans: Found 5, expected 1", "T-shirts: Found 20, expected 15"]
+# @staff_bp.route("/test-email")
+# @staff_required
+# def test_email_flow():
+#     # Provide fake data
+#     recipient = "student-test@example.com"
+#     order_id = 12345
+#     issues = ["Jeans: Found 5, expected 1", "T-shirts: Found 20, expected 15"]
     
-    try:
-        send_verification_alert(recipient, order_id, issues)
-        return "<h3>Email task started!</h3>Check your Mailtrap Sandbox inbox in a few seconds."
-    except Exception as e:
-        return f"<h3>It failed!</h3> Error: {str(e)}"
+#     try:
+#         send_verification_alert(recipient, order_id, issues)
+#         return "<h3>Email task started!</h3>Check your Mailtrap Sandbox inbox in a few seconds."
+#     except Exception as e:
+#         return f"<h3>It failed!</h3> Error: {str(e)}"
+

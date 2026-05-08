@@ -147,6 +147,7 @@ def initialize_payment(order_id):
     try:
         response = requests.post(url, headers=headers, json=body)
         res_data = response.json()
+        print(f"Payment initialization: {res_data}")
 
         if res_data['status']:
             # Redirect the user to Paystack's secure checkout page
@@ -172,6 +173,7 @@ def payment_callback():
     
     response = requests.get(url, headers=headers)
     res_data = response.json()
+    print(f"Payment callback: {res_data}")
 
     if res_data['status'] and res_data['data']['status'] == 'success':
         # Get the Order ID we stored in metadata

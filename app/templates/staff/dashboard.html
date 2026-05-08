@@ -44,6 +44,11 @@
                 <a href="#" class="block w-full text-left p-4 bg-white/10 hover:bg-white/20 rounded-2xl transition">
                     Customer Records & History
                 </a>
+
+                <a href="{{ url_for('staff.get_paid_orders') }}" class="block w-full text-left p-4 bg-green-500 hover:bg-green-600 rounded-2xl transition flex justify-between items-center text-white">
+                    <span>View Paid Orders (Ready to Wash)</span>
+                    <span class="bg-white text-green-600 text-xs px-2 py-1 rounded font-bold">{{ stats.total_paid }}</span>
+                </a>
             </div>
         </div>
 

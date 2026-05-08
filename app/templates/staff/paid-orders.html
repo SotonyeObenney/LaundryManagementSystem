@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="mb-8">
+        <h1 class="text-4xl font-black text-gray-900">Ready for Processing</h1>
+        <p class="text-gray-500">These orders are <strong>Paid</strong> and ready for the machines.</p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6">
+        {% for order in orders %}
+        <div class="bg-white rounded-3xl border-2 border-green-100 shadow-sm p-6 flex justify-between items-center">
+            <div class="flex items-center gap-6">
+                <div class="h-16 w-16 bg-green-100 rounded-2xl flex items-center justify-center text-2xl">
+                    💰
+                </div>
+                <div>
+                    <h3 class="text-lg font-black text-gray-900">Order #{{ order.id }}</h3>
+                    <p class="text-gray-500">{{ order.customer.name }} • {{ order.service_type }}</p>
+                    <span class="inline-block mt-2 px-3 py-1 bg-green-600 text-white text-xs font-bold rounded-full uppercase">Paid & Verified</span>
+                </div>
+            </div>
+            
+            <div class="text-right">
+                <p class="text-xs text-gray-400 uppercase font-bold">Paid Amount</p>
+                <p class="text-xl font-black text-gray-900">{{ order.total_price | currency }}</p>
+                <!-- This button will lead to Sprint 4 (Mark as Out for Delivery) -->
+                <button class="mt-4 px-6 py-2 bg-gray-900 text-white rounded-xl font-bold opacity-50 cursor-not-allowed">
+                    Await Delivery Logic
+                </button>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
+            <p class="text-gray-400 font-medium">No paid orders in the queue yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
