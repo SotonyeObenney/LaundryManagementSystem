@@ -1,0 +1,88 @@
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 834-350-105
+INFO:werkzeug: * Detected change in '/home/auwal/laundry_app/app/bookings/routes.py', reloading
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 834-350-105
+INFO:werkzeug: * Detected change in '/home/auwal/laundry_app/app/bookings/routes.py', reloading
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 834-350-105
+INFO:werkzeug: * Detected change in '/home/auwal/laundry_app/app/bookings/routes.py', reloading
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 834-350-105
+INFO:werkzeug: * Detected change in '/home/auwal/laundry_app/app/bookings/routes.py', reloading
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 834-350-105
+INFO:werkzeug: * Detected change in '/home/auwal/laundry_app/app/bookings/routes.py', reloading
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 834-350-105
+INFO:werkzeug: * Detected change in '/home/auwal/laundry_app/app/staff/routes.py', reloading
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 834-350-105
+INFO:werkzeug: * Detected change in '/home/auwal/laundry_app/app/staff/routes.py', reloading
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 834-350-105
+INFO:werkzeug: * Detected change in '/home/auwal/laundry_app/app/bookings/routes.py', reloading
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 834-350-105
+INFO:werkzeug: * Detected change in '/home/auwal/laundry_app/app/bookings/routes.py', reloading
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 834-350-105
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:52:59] "GET /staff/delivery-queue HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:52:59] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:04] "GET /bookings/create HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:04] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:09] "[32mPOST /bookings/create HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:09] "GET /bookings/dashboard HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:09] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:14] "[32mGET /dashboard HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:14] "GET /staff/dashboard HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:14] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:16] "GET /staff/pending-orders HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:16] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:18] "[32mPOST /staff/receive-order/8 HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:18] "GET /staff/pending-orders HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:18] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:26] "GET /staff/verify-order/8 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:26] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:30] "[32mPOST /staff/verify-order/8 HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:30] "GET /staff/dashboard HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:30] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:39] "GET /staff/paid-orders HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:39] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+ERROR:root:Failed to send email for Order #7: emails/status_update.html
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:40] "[32mPOST /staff/dispatch-order/7 HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:40] "GET /staff/paid-orders HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:40] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:43] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:43] "[32mGET /dashboard HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:43] "GET /staff/dashboard HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:53:43] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:54:12] "GET /staff/delivery-queue HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:54:12] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:54:14] "[32mPOST /staff/confirm-delivery/5 HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:54:14] "GET /staff/delivery-queue HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:54:14] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:54:15] "[32mPOST /staff/confirm-delivery/7 HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:54:15] "GET /staff/delivery-queue HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 16:54:15] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:00:43] "GET /bookings/dashboard HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:00:43] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:02:43] "GET /bookings/dashboard HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:02:43] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:02:52] "GET /bookings/order/8/invoice HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:02:52] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:03:03] "[32mGET /bookings/pay/8 HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:03:23] "[32mGET /bookings/payment/callback?trxref=zc4i24tzjs&reference=zc4i24tzjs HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:03:23] "GET /bookings/dashboard HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:03:23] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:05:33] "[32mGET /dashboard HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:05:33] "GET /staff/dashboard HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:05:33] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:05:36] "GET /staff/paid-orders HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:05:36] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:05:44] "[32mPOST /staff/dispatch-order/8 HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:05:44] "GET /staff/paid-orders HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 17:05:44] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 21:12:28] "[32mGET /dashboard HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 21:12:28] "GET /staff/dashboard HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/May/2026 21:12:28] "[36mGET /static/auth/style.css HTTP/1.1[0m" 304 -
