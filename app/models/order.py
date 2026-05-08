@@ -15,6 +15,7 @@ class Order(db.Model):
     payment_status: Mapped[str] = mapped_column(String(20), nullable=False, default="unpaid")
     order_date: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    delivery_date: Mapped[datetime] = mapped_column(DateTime, nullable=True)
 
     customer = relationship("User", backref="orders")
     items = relationship("OrderItem", backref="order", cascade="all, delete-orphan")
